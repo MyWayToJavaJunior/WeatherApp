@@ -4,10 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.squareup.picasso.Picasso
-import org.jetbrains.anko.find
+import kotlinx.android.synthetic.main.item_forecast.view.*
 import ru.kostikov.weatherapp.R
 import ru.kostikov.weatherapp.domain.model.Forecast
 import ru.kostikov.weatherapp.domain.model.ForecastList
@@ -32,19 +30,15 @@ class ForecastListAdapter(private val weekForecast: ForecastList,
 
     class ViewHolder(view: View,
                      private val itemClick: ((Forecast) -> Unit)) : RecyclerView.ViewHolder(view){
-        private val iconView = view.find<ImageView>(R.id.icon)
-        private val dateView = view.find<TextView>(R.id.date)
-        private val descriptionView = view.find<TextView>(R.id.description)
-        private val maxTemperatureVal = view.find<TextView>(R.id.maxTemperature)
-        private val minTemperatureVal = view.find<TextView>(R.id.minTemperature)
 
         fun bind(forecast: Forecast){
             with(forecast){
-                Picasso.with(itemView.context).load(iconUrl).into(iconView)
-                dateView.text = date
-                descriptionView.text = description
-                maxTemperatureVal.text = "$high"
-                minTemperatureVal.text = "$low"
+                Picasso.with(itemView.context).load(iconUrl).into(itemView.icon)
+                // every bind perform findById under hood properties, because it's not Activity/Fragment
+                itemView.date.text = date
+                itemView.description.text = description
+                itemView.maxTemperature.text = "$high"
+                itemView.minTemperature.text = "$low"
                 itemView.setOnClickListener { itemClick(this) }
             }
         }
