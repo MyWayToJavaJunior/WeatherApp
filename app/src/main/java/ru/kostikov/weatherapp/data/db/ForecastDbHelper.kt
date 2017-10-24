@@ -8,7 +8,8 @@ import ru.kostikov.weatherapp.ui.App
 /**
  * @author Kostikov Aleksey
  */
-class ForecastDbHelper(ctx: Context = App.instance): ManagedSQLiteOpenHelper(ctx, ForecastDbHelper.DB_NAME, null, ForecastDbHelper.DB_VERSION ) {
+class ForecastDbHelper
+    private constructor (ctx: Context = App.instance): ManagedSQLiteOpenHelper(ctx, ForecastDbHelper.DB_NAME, null, ForecastDbHelper.DB_VERSION ) {
 
     companion object {
         val DB_NAME = "forecast.db"
