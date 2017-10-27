@@ -1,9 +1,8 @@
-package ru.kostikov.weatherapp.domain.mappers
+package ru.kostikov.weatherapp.data.server
 
 import ru.kostikov.weatherapp.data.Forecast
 import ru.kostikov.weatherapp.data.ForecastResult
 import ru.kostikov.weatherapp.domain.model.ForecastList
-import java.text.DateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import ru.kostikov.weatherapp.domain.model.Forecast as ModelForecast
@@ -11,10 +10,10 @@ import ru.kostikov.weatherapp.domain.model.Forecast as ModelForecast
 /**
  * @author Kostikov Aleksey
  */
-class ForecastDataMapper {
+class ServerDataMapper {
 
-    fun convertFromDataModel(forecast: ForecastResult): ForecastList{
-        return ForecastList(forecast.city.name, forecast.city.country, convertForecastListToDomain(forecast.list) )
+    fun convertFromDataModel(zipCode: Long, forecast: ForecastResult): ForecastList{
+        return ForecastList(zipCode, forecast.city.name, forecast.city.country, convertForecastListToDomain(forecast.list) )
     }
 
     private fun convertForecastListToDomain(list: List<Forecast>): List<ModelForecast>{
@@ -24,16 +23,12 @@ class ForecastDataMapper {
         }
     }
 
-    private fun convertForecastItemToDomain(forecast: Forecast): ModelForecast{
-        return ModelForecast(convertDate(forecast.dt),forecast.weather[0].description,
+    private fun convertForecastItemToDomain(forecast: Forecast) = with(forecast){
+        ModelForecast(forecast.dt, forecast.weather[0].description,
                 forecast.temp.max.toInt(), forecast.temp.min.toInt(),generateIconUrl(forecast.weather[0].icon) )
     }
 
     private fun generateIconUrl(iconCode: String): String
             = "http://openweathermap.org/img/w/$iconCode.png"
-
-    private fun convertDate(date: Long): String{
-        val df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault())
-        return df.format(date)
-    }
 }
+

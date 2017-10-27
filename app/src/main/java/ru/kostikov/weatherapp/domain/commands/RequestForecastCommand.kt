@@ -1,15 +1,18 @@
 package ru.kostikov.weatherapp.domain.commands
 
-import ru.kostikov.weatherapp.data.ForecastRequest
-import ru.kostikov.weatherapp.domain.mappers.ForecastDataMapper
+import ru.kostikov.weatherapp.domain.datasource.ForecastProvider
 import ru.kostikov.weatherapp.domain.model.ForecastList
 
 /**
  * @author Kostikov Aleksey
  */
-class RequestForecastCommand(private val zipCode: String): Command<ForecastList> {
+class RequestForecastCommand(val zipCode: Long,
+                             val forecastProvider: ForecastProvider = ForecastProvider()): Command<ForecastList> {
+    companion object {
+        val DAYS = 7
+    }
+
     override fun execute(): ForecastList {
-        val forecastRequest = ForecastRequest(zipCode)
-        return ForecastDataMapper().convertFromDataModel(forecastRequest.execute())
+        return forecastProvider.requestByZipCode(zipCode, DAYS)
     }
 }

@@ -2,6 +2,7 @@ package ru.kostikov.weatherapp.data.db
 
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
+import ru.kostikov.weatherapp.domain.datasource.ForecastDataSource
 import ru.kostikov.weatherapp.domain.model.ForecastList
 import ru.kostikov.weatherapp.extensions.clear
 import ru.kostikov.weatherapp.extensions.parseList
@@ -11,11 +12,11 @@ import ru.kostikov.weatherapp.extensions.toVarargArray
 /**
  * @author Kostikov Aleksey
  */
-class ForecastDb {
+class ForecastDb: ForecastDataSource {
     val forecastDbHelper: ForecastDbHelper = ForecastDbHelper.instance
     val dataMapper: DbDataMapper = DbDataMapper()
 
-    fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
+    override fun requestForecastByZipCode(zipCode: Long, date: Long) = forecastDbHelper.use {
         val dailyRequest = "${DayForecastTable.CITY_ID} = ? AND ${DayForecastTable.DATE} >= ?"
         val dailyForecast = select(DayForecastTable.NAME)
                 .whereSimple(dailyRequest, zipCode.toString(), date.toString())
@@ -39,4 +40,6 @@ class ForecastDb {
                     }
             }
     }
+
+
 }
