@@ -2,6 +2,7 @@ package ru.kostikov.weatherapp.data.server
 
 import ru.kostikov.weatherapp.data.db.ForecastDb
 import ru.kostikov.weatherapp.domain.datasource.ForecastDataSource
+import ru.kostikov.weatherapp.domain.model.Forecast
 import ru.kostikov.weatherapp.domain.model.ForecastList
 
 /**
@@ -16,4 +17,7 @@ class ForecastServer(private val dataMapper: ServerDataMapper = ServerDataMapper
         forecastDb.saveForecast(converted)
         return forecastDb.requestForecastByZipCode(zipCode, date)
     }
+
+    override fun requestDayForecast(id: Long): Forecast?
+            = throw UnsupportedOperationException()
 }

@@ -1,5 +1,8 @@
 package ru.kostikov.weatherapp.extensions
 
+import java.text.DateFormat
+import java.util.*
+
 /**
  * @author Kostikov Aleksey
  */
@@ -14,3 +17,8 @@ inline fun <T, R : Any> Iterable<T>.firstResult(predicate: (T) -> R?): R {
         }
         throw NoSuchElementException("No element matching predicate was found.")
     }
+
+fun Long.toDateString(dateFormat: Int = DateFormat.MEDIUM): String {
+    val df = DateFormat.getDateInstance(dateFormat, Locale.getDefault())
+    return df.format(this)
+}

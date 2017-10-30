@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.toast
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 import ru.kostikov.weatherapp.R
 import ru.kostikov.weatherapp.domain.commands.RequestForecastCommand
@@ -20,10 +20,16 @@ class MainActivity : AppCompatActivity() {
         forecastListRecyclerView.layoutManager = LinearLayoutManager(this)
 
         doAsync {
-            val result = RequestForecastCommand(94043).execute()
+            val result = RequestForecastCommand(193318).execute()
             uiThread {
-                forecastListRecyclerView.adapter = ForecastListAdapter(result) { toast(it.description) }
+                val adapter = ForecastListAdapter(result) {
+                    startActivity<DetailActivity>(DetailActivity.ID to it.id,
+                            DetailActivity.CITY_NAME to result.city)
+                }
+                forecastListRecyclerView.adapter = adapter
+                title = "${result.city} (${result.country})"
             }
         }
     }
+
 }
